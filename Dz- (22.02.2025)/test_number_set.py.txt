@@ -1,0 +1,33 @@
+import unittest
+
+class TestNumberSet(unittest.TestCase):
+    def setUp(self):
+        # Инициализируем объект класса NumberSet перед каждым тестом
+        self.numbers_set = NumberSet([10, 20, 30, 40])
+    
+    def test_sum(self):
+        # Проверяем сумму элементов
+        expected_result = 100
+        actual_result = self.numbers_set.sum()
+        self.assertEqual(expected_result, actual_result)
+        
+    def test_average(self):
+        # Проверяем среднее арифметическое
+        expected_result = 25.0
+        actual_result = self.numbers_set.average()
+        self.assertAlmostEqual(expected_result, actual_result, places=7)
+        
+    def test_max_value(self):
+        # Проверяем максимальное значение
+        expected_result = 40
+        actual_result = self.numbers_set.max_value()
+        self.assertEqual(expected_result, actual_result)
+        
+    def test_min_value(self):
+        # Проверяем минимальное значение
+        expected_result = 10
+        actual_result = self.numbers_set.min_value()
+        self.assertEqual(expected_result, actual_result)
+
+if __name__ == '__main__':
+    unittest.main()
