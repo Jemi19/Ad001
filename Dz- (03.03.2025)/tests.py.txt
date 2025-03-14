@@ -1,0 +1,90 @@
+# Файл: tests.py
+
+import unittest
+from statistics_calculator import StatisticsCalculator
+
+class TestStatisticsCalculator(unittest.TestCase):
+    def test_mean(self):
+        calc = StatisticsCalculator([1, 2, 3, 4, 5])
+        self.assertAlmostEqual(calc.mean(), 3.0, places=5)
+        
+        calc = StatisticsCalculator([-100, 200, 300])
+        self.assertAlmostEqual(calc.mean(), 133.33, places=2)
+        
+        with self.assertRaises(ValueError):
+            StatisticsCalculator([])
+    
+    def test_median(self):
+        calc = StatisticsCalculator([1, 2, 3, 4, 5])
+        self.assertEqual(calc.median(), 3.0)
+        
+        calc = StatisticsCalculator([1, 2, 3, 4])
+        self.assertEqual(calc.median(), 2.5)
+        
+        with self.assertRaises(ValueError):
+            StatisticsCalculator([])
+    
+    def test_variance(self):
+        calc = StatisticsCalculator([1, 2, 3, 4, 5])
+        self.assertAlmostEqual(calc.variance(), 2.0, places=5)
+        
+        calc = StatisticsCalculator([10, 20, 30, 40, 50])
+        self.assertAlmostEqual(calc.variance(), 200.0, places=5)
+        
+        with self.assertRaises(ValueError):
+            StatisticsCalculator([])
+    
+if __name__ == '__main__':
+    unittest.main()
+
+
+
+
+
+import unittest
+from file_manager import FileManager
+import os
+import json
+import csv
+
+class TestFileManager(unittest.TestCase):
+    def setUp(self):
+        self.file_name = 'test_file.txt'
+        self.manager = FileManager(self.file_name)
+
+    def tearDown(self):
+        try:
+            os.remove(self.file_name)
+        except OSError:
+            pass
+
+    def test_write_and_read_text(self):
+        text = "Hello, World!"
+        self.manager.write_text(text)
+        result = self.manager.read_text()
+        self.assertEqual(result, text)
+
+    def test_write_and_read_json(self):
+        data = {"key": "value"}
+        self.manager.write_json(data)
+        result = self.manager.read_json()
+        self.assertDictEqual(result, data)
+
+    def test_write_and_read_csv(self):
+        rows = [["a", "b"], ["c", "d"]]
+        self.manager.write_csv(rows)
+        result = self.manager.read_csv()
+        self.assertListEqual(result, rows)
+
+    def test_nonexistent_file(self):
+        self.assertIsNone(self.manager.read_text())
+        self.assertIsNone(self.manager.read_json())
+        self.assertListEqual(self.manager.read_csv(), [])
+
+    def test_delete_file(self):
+        self.manager.write_text("Test")
+        self.manager.delete_file()
+        self.assertFalse(os.path.exists(self.file_name))
+
+if __name__ == "__main__":
+    unittest.main()

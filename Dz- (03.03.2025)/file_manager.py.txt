@@ -1,0 +1,57 @@
+import json
+import csv
+
+class FileManager:
+    def __init__(self, filename):
+        self.filename = filename
+
+    def write_text(self, text):
+        """Запись текста в файл."""
+        with open(self.filename, 'w', encoding='utf-8') as file:
+            file.write(text)
+
+    def read_text(self):
+        """Чтение текста из файла."""
+        try:
+            with open(self.filename, 'r', encoding='utf-8') as file:
+                return file.read()
+        except FileNotFoundError:
+            return None
+
+    def write_json(self, data):
+        """Запись данных в формате JSON в файл."""
+        with open(self.filename, 'w', encoding='utf-8') as file:
+            json.dump(data, file, indent=4)
+
+    def read_json(self):
+        """Чтение данных в формате JSON из файла."""
+        try:
+            with open(self.filename, 'r', encoding='utf-8') as file:
+                return json.load(file)
+        except FileNotFoundError:
+            return None
+
+    def write_csv(self, rows, headers=None):
+        """Запись данных в формате CSV в файл."""
+        with open(self.filename, 'w', newline='', encoding='utf-8') as file:
+            writer = csv.writer(file)
+            if headers:
+                writer.writerow(headers)
+            writer.writerows(rows)
+
+    def read_csv(self):
+        """Чтение данных в формате CSV из файла."""
+        try:
+            with open(self.filename, 'r', newline='', encoding='utf-8') as file:
+                reader = csv.reader(file)
+                return list(reader)
+        except FileNotFoundError:
+            return []
+
+    def delete_file(self):
+        """Удаление файла."""
+        try:
+            os.remove(self.filename)
+            print(f"Файл {self.filename} удалён.")
+        except FileNotFoundError:
+            print(f"Файл {self.filename} не существует.")

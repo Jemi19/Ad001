@@ -1,0 +1,32 @@
+# Файл: statistics_calculator.py
+
+import math
+
+class StatisticsCalculator:
+    def __init__(self, data):
+        if not isinstance(data, list):
+            raise TypeError("Данные должны быть представлены в виде списка.")
+        
+        if len(data) == 0:
+            raise ValueError("Список не должен быть пустым.")
+            
+        self.data = sorted(data)
+    
+    def mean(self):
+        """Вычисление среднего арифметического"""
+        return sum(self.data) / len(self.data)
+    
+    def median(self):
+        """Вычисление медианы"""
+        n = len(self.data)
+        if n % 2 == 1:
+            # Если количество элементов нечётное, возвращаем средний элемент
+            return self.data[n // 2]
+        else:
+            # Если количество элементов чётное, возвращаем среднее двух средних элементов
+            return (self.data[(n // 2) - 1] + self.data[n // 2]) / 2
+    
+    def variance(self):
+        """Вычисление дисперсии"""
+        mean_value = self.mean()
+        return sum((x - mean_value) ** 2 for x in self.data) / len(self.data)

@@ -1,0 +1,37 @@
+import unittest
+from user_manager import User, UserManager
+
+class TestUserManager(unittest.TestCase):
+    def setUp(self):
+        self.manager = UserManager()
+        self.user1 = User('Иван Иванов', 'ivan@example.com', 25)
+        self.user2 = User('Петр Петров', 'petr@example.com', 30)
+
+    def tearDown(self):
+        pass
+
+    def test_add_user(self):
+        """Проверка добавления пользователя."""
+        self.manager.add_user(self.user1)
+        self.assertIn(self.user1, self.manager.users)
+
+    def test_remove_user_by_email(self):
+        """Проверка удаления пользователя по email."""
+        self.manager.add_user(self.user1)
+        self.assertTrue(self.manager.remove_user_by_email('ivan@example.com'))
+        self.assertNotIn(self.user1, self.manager.users)
+
+    def test_find_user_by_email(self):
+        """Проверка поиска пользователя по email."""
+        self.manager.add_user(self.user1)
+        found_user = self.manager.find_user_by_email('ivan@example.com')
+        self.assertIs(found_user, self.user1)
+
+    def test_duplicate_email_error(self):
+        """Проверка обработки ошибки при добавлении пользователя с существующим email."""
+        self.manager.add_user(self.user1)
+        with self.assertRaises(ValueError):
+            self.manager.add_user(User('Другой Иван', 'ivan@example.com', 35))
+
+if __name__ == '__main__':
+    unittest.main()

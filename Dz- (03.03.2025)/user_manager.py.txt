@@ -1,0 +1,32 @@
+class User:
+    def __init__(self, name, email, age):
+        self.name = name
+        self.email = email
+        self.age = age
+
+    def __repr__(self):
+        return f"User(name={self.name}, email={self.email}, age={self.age})"
+
+
+class UserManager:
+    def __init__(self):
+        self.users = []
+
+    def add_user(self, user):
+        for existing_user in self.users:
+            if existing_user.email == user.email:
+                raise ValueError(f"Пользователь с email '{user.email}' уже существует.")
+        self.users.append(user)
+
+    def remove_user_by_email(self, email):
+        for index, user in enumerate(self.users):
+            if user.email == email:
+                del self.users[index]
+                return True
+        return False
+
+    def find_user_by_email(self, email):
+        for user in self.users:
+            if user.email == email:
+                return user
+        return None
